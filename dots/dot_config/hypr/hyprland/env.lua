@@ -23,4 +23,6 @@ hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 hl.env("_JAVA_AWT_WM_NONREPARENTING", "1")
 
 -- Default editor
-hl.env("EDITOR", "nvim")
+hl.env("EDITOR", vars.editor)
+hl.env("TERMINAL", vars.terminal)
+
