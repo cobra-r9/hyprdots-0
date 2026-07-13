@@ -2,7 +2,7 @@
 scan_timeout = 100
 command_timeout = 500
 follow_symlinks = false
-add_newline = false
+add_newline = true
 palette = "custom1"
 
 format = """
@@ -18,7 +18,7 @@ right_format = """$all"""
 
 [directory]
 style = "teal"
-format = "[ $path ]($style)"
+format = "[$path ]($style)"
 truncation_length = 4
 
 [directory.substitutions]
@@ -78,7 +78,7 @@ ignore_timeout = true
 [git_branch]
 symbol = "[](white) "
 style = "fg:black bg:white"
-format =  "  [$symbol$branch]($style)[](white)"
+format =  "[$symbol$branch]($style)[](white)"
 
 # [git_status]
 # MINIMAL git status
