@@ -26,8 +26,8 @@ alias gm='git merge'
 alias gp='git push'
 
 # chezmoi aliases
-alias cha='chezmoi add'
-alias che='chezmoi edit'
-alias chc='chezmoi apply'
-alias chd='chezmoi diff'
-alias ccd='chezmoi cd'
+alias dotsadd='chezmoi add'
+alias nvimdots='chezmoi edit'
+alias dots='chezmoi apply'
+alias dotsdiff='chezmoi diff'
+alias dotsdir='chezmoi cd'
