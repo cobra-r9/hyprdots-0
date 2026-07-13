@@ -24,3 +24,9 @@ alias ga='git add .'
 alias gc='git commit -m'
 alias gm='git merge'
 alias gp='git push'
+
+# chezmoi aliases
+alias cha='chezmoi add'
+alias che='chezmoi edit'
+alias chc='chezmoi apply'
+alias chd='chezmoi diff'
