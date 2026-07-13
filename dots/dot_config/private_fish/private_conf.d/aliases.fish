@@ -28,6 +28,6 @@ alias gp='git push'
 # chezmoi aliases
 alias dotsadd='chezmoi add'
 alias nvimdots='chezmoi edit'
-alias dots='chezmoi apply'
+alias dotsapply='chezmoi apply'
 alias dotsdiff='chezmoi diff'
 alias dotsdir='chezmoi cd'

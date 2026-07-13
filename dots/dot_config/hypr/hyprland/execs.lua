@@ -28,8 +28,13 @@ hl.on("hyprland.start", function()
     -- Start kdeconnect-indicator (case kdeconnect is installed) 
     hl.exec_cmd("kdeconnect-indicator")
 
-    -- Start shell
-    hl.exec_cmd("caelestia shell -d")
+    -- Start shell if enabled.
+    if vars.enable_caelestia then
+        hl.exec_cmd("caelestia shell -d")
+    end
+
+    -- note that without caelestia, you would not have any notification daemon.
+
 end)
 
 -- Resizer listener

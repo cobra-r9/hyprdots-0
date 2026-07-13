@@ -107,6 +107,7 @@ return {
     kbRestoreLock              = "SUPER + ALT + L",
 
     -- Caelestia
+    enable_caelestia           = true,
     kbKillCaelestia            = "CTRL + ALT + Delete",
     kbRestartCaelestia         = "CTRL + SHIFT + R",
 
