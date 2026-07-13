@@ -609,9 +609,9 @@
     "paths": {
         "lockNoNotifsPic": "root:/assets/dino.png",
         "lyricsDir": "~/Music/lyrics/",
-        "mediaGif": "~/Pictures/Avatar/hollow-knight-penguim.gif",
+        "mediaGif": "~/.config/.avatars/hollow-knight-penguim.gif",
         "noNotifsPic": "root:/assets/dino.png",
-        "sessionGif": "~/Pictures/Avatar/deltarune-knight-front.gif",
+        "sessionGif": "~/.config/.avatars/deltarune-knight-front.gif",
         "wallpaperDir": "~/Pictures/Wallpapers"
     },
     "services": {
