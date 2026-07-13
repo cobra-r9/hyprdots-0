@@ -1,316 +1,363 @@
-# version: 1.0.0
-
+"$schema" = "https://starship.rs/config-schema.json"
+scan_timeout = 100
+command_timeout = 500
+follow_symlinks = false
 add_newline = false
-continuation_prompt = "[▸▹ ](dimmed white)"
+palette = "custom1"
 
-format = """($nix_shell$container$fill$git_metrics\n)$cmd_duration\
-$hostname\
-$localip\
-$shlvl\
-$shell\
-$env_var\
-$jobs\
-$sudo\
-$username\
-$character"""
-
-right_format = """
-$singularity\
-$kubernetes\
+format = """
 $directory\
-$vcsh\
-$fossil_branch\
+${custom.giturl}\
 $git_branch\
-$git_commit\
-$git_state\
+${custom.git_worktree}\
 $git_status\
-$hg_branch\
-$pijul_channel\
-$docker_context\
-$package\
-$c\
-$cmake\
-$cobol\
-$daml\
-$dart\
-$deno\
-$dotnet\
-$elixir\
-$elm\
-$erlang\
-$fennel\
-$golang\
-$guix_shell\
-$haskell\
-$haxe\
-$helm\
-$java\
-$julia\
-$kotlin\
-$gradle\
-$lua\
-$nim\
-$nodejs\
-$ocaml\
-$opa\
-$perl\
-$php\
-$pulumi\
-$purescript\
-$python\
-$raku\
-$rlang\
-$red\
-$ruby\
-$rust\
-$scala\
-$solidity\
-$swift\
-$terraform\
-$vlang\
-$vagrant\
-$zig\
-$buf\
-$conda\
-$meson\
-$spack\
-$memory_usage\
-$aws\
-$gcloud\
-$openstack\
-$azure\
-$crystal\
-$custom\
-$status\
-$os\
-$battery\
-$time"""
-
-[fill]
-symbol = ' '
-
-[character]
-format = "$symbol "
-success_symbol = "[◎](bold italic bright-yellow)"
-error_symbol = "[○](italic purple)"
-vimcmd_symbol = "[■](italic dimmed green)"
-# not supported in zsh
-vimcmd_replace_one_symbol = "◌"
-vimcmd_replace_symbol = "□"
-vimcmd_visual_symbol = "▼"
-
-[env_var.VIMSHELL]
-format = "[$env_value]($style)"
-style = 'green italic'
-
-[sudo]
-format = "[$symbol]($style)"
-style = "bold italic bright-purple"
-symbol = "⋈┈"
-disabled = false
-
-[username]
-style_user = "bright-yellow bold italic"
-style_root = "purple bold italic"
-format = "[⭘ $user]($style) "
-disabled = false
-show_always = false
+$line_break\
+$character\
+"""
+right_format = """$all"""
 
 [directory]
-home_symbol = "⌂"
-truncation_length = 2
-truncation_symbol = "□ "
-read_only = " ◈"
-use_os_path_sep = true
-style = "italic blue"
-format = '[$path]($style)[$read_only]($read_only_style)'
-repo_root_style = 'bold blue'
-repo_root_format = '[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) [△](bold bright-blue)'
+style = "teal"
+format = "[ $path ]($style)"
+truncation_length = 4
 
-[cmd_duration]
-min_time = 0
-format = "[◄ $duration ](italic white)"
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+"Developer" = "󰲋 "
+"Others" = " "
 
-[jobs]
-format = "[$symbol$number]($style) "
-style = "white"
-symbol = "[▶](blue italic)"
+[username]
+disabled = true
+show_always = true
+style_user = "bg:surface0 fg:text"
+style_root = "bg:surface0 fg:text"
+format = " $user "
 
-[localip]
-ssh_only = true
-format = " ◯[$localipv4](bold magenta)"
+[line_break]
+disabled = true
+
+[character]
+disabled = false
+success_symbol = "[ ](bold fg:green)"
+error_symbol = "[✘ ](bold fg:red)"
+vimcmd_symbol = "[: ](bold fg:yellow)"
+
+[package]
 disabled = false
 
 [time]
-disabled = false
-format = "[ $time]($style)"
+disabled = true
 time_format = "%R"
-utc_time_offset = "local"
-style = "italic dimmed white"
+format = "[[  $time ](fg:yellow bg:foam)]($style)"
 
-[battery]
-format = "[ $percentage $symbol]($style)"
-full_symbol = "█"
-charging_symbol = "[↑](italic bold green)"
-discharging_symbol = "↓"
-unknown_symbol = "░"
-empty_symbol = "▃"
-
-[[battery.display]]
-threshold = 20
-style = "italic bold red"
-
-[[battery.display]]
-threshold = 60
-style = "italic dimmed bright-purple"
-
-[[battery.display]]
-threshold = 70
-style = "italic dimmed yellow"
+[custom.giturl]
+description = "Display symbol for remote Git server"
+command = """
+GIT_REMOTE=$(command git ls-remote --get-url 2> /dev/null)
+if [[ "$GIT_REMOTE" =~ "github" ]]; then
+    GIT_REMOTE_SYMBOL=" "
+elif [[ "$GIT_REMOTE" =~ "gitlab" ]]; then
+    GIT_REMOTE_SYMBOL=" "
+elif [[ "$GIT_REMOTE" =~ "bitbucket" ]]; then
+    GIT_REMOTE_SYMBOL=" "
+elif [[ "$GIT_REMOTE" =~ "git" ]]; then
+    GIT_REMOTE_SYMBOL=" "
+else
+    GIT_REMOTE_SYMBOL=" "
+fi
+echo "$GIT_REMOTE_SYMBOL "
+"""
+when = "git rev-parse --is-inside-work-tree 2> /dev/null"
+format = "$output"
+require_repo = true
+ignore_timeout = true
 
 [git_branch]
-format = " [$branch(:$remote_branch)]($style)"
-symbol = "[△](bold italic bright-blue)"
-style = "italic bright-blue"
-truncation_symbol = "⋯"
-truncation_length = 11
-ignore_branches = ["main", "master"]
-only_attached = true
+symbol = "[](base) "
+style = "fg:lavender bg:base"
+format =  "  [$symbol$branch]($style)[](base)"
 
-[git_metrics]
-format = '([▴$added]($added_style))([▿$deleted]($deleted_style))'
-added_style = 'italic dimmed green'
-deleted_style = 'italic dimmed red'
-ignore_submodules = true
-disabled = false
+# [git_status]
+# MINIMAL git status
+# format = " [($all_status$ahead_behind )]($style)"
+# ahead    = "⇡${count} "
+# behind   = "⇣${count} "
+# diverged = "⇕⇡${ahead_count}⇣${behind_count} "
 
 [git_status]
-style = "bold italic bright-blue"
-format = "([⎪$ahead_behind$staged$modified$untracked$renamed$deleted$conflicted$stashed⎥]($style))"
-conflicted = "[◪◦](italic bright-magenta)"
-ahead = "[▴│[${count}](bold white)│](italic green)"
-behind = "[▿│[${count}](bold white)│](italic red)"
-diverged = "[◇ ▴┤[${ahead_count}](regular white)│▿┤[${behind_count}](regular white)│](italic bright-magenta)"
-untracked = "[◌◦](italic bright-yellow)"
-stashed = "[◃◈](italic white)"
-modified = "[●◦](italic yellow)"
-staged = "[▪┤[$count](bold white)│](italic bright-cyan)"
-renamed = "[◎◦](italic bright-blue)"
-deleted = "[✕](italic red)"
+format = "[$untracked$staged$modified$renamed$conflicted$ahead_behind ]($style)"
+# options available for format
+staged     = "[+](green)"
+modified   = "[!](yellow)"
+renamed    = "[»](blue)"
+deleted    = "[-](red)"
+untracked  = "[?](red)"
+stashed    = "[≡](lavender)"
+conflicted = "[✖](red bold)"
 
-[deno]
-format = " [deno](italic) [∫ $version](green bold)"
-version_format = "${raw}"
+ahead      = "[⇡${count}](teal)"
+behind     = "[⇣${count}](peach)"
+diverged   = "[⇕⇡${ahead_count}⇣${behind_count}](mauve)"
 
-[lua]
-format = " [lua](italic) [${symbol}${version}]($style)"
-version_format = "${raw}"
-symbol = "⨀ "
-style = "bold bright-yellow"
+[custom.git_worktree]
+description = "Show indicator when inside a git worktree"
+command = """
+if git rev-parse --git-dir >/dev/null 2>&1; then
+      common_dir=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)
+      git_dir=$(git rev-parse --path-format=absolute --git-dir 2>/dev/null)
+      if [ "$common_dir" != "$git_dir" ]; then
+            echo "⛓ "
+      fi
+fi
+"""
+when = "git rev-parse --is-inside-work-tree >/dev/null 2>&1"
+format = " ([$output ]($style))"
+style = "bold green"
+require_repo = true
+ignore_timeout = true
+
+
+[os]
+disabled = true
+
+[os.symbols]
+Windows = "󰍲"
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = " "
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
 
 [nodejs]
-format = " [node](italic) [◫ ($version)](bold bright-green)"
-version_format = "${raw}"
-detect_files = ["package-lock.json", "yarn.lock"]
-detect_folders = ["node_modules"]
-detect_extensions = []
+symbol = ""
+format = "[ $symbol( $version) ]($style)"
 
-[python]
-format = " [py](italic) [${symbol}${version}]($style)"
-symbol = "[⌉](bold bright-blue)⌊ "
-version_format = "${raw}"
-style = "bold bright-yellow"
-
-[ruby]
-format = " [rb](italic) [${symbol}${version}]($style)"
-symbol = "◆ "
-version_format = "${raw}"
-style = "bold red"
-
-[rust]
-format = " [rs](italic) [$symbol$version]($style)"
-symbol = "⊃ "
-version_format = "${raw}"
-style = "bold red"
-
-[package]
-format = " [pkg](italic dimmed) [$symbol$version]($style)"
-version_format = "${raw}"
-symbol = "◨ "
-style = "dimmed yellow italic bold"
-
-[swift]
-format = " [sw](italic) [${symbol}${version}]($style)"
-symbol = "◁ "
-style = "bold bright-red"
-version_format = "${raw}"
-
-[aws]
-disabled = true
-format = " [aws](italic) [$symbol $profile $region]($style)"
-style = "bold blue"
-symbol = "▲ "
-
-[buf]
-symbol = "■ "
-format = " [buf](italic) [$symbol $version $buf_version]($style)"
+[bun]
+detect_files = ["bun.lock", "bun.lockb"]
 
 [c]
-symbol = "ℂ "
-format = " [$symbol($version(-$name))]($style)"
+symbol = " "
+format = "[ $symbol( $version) ]($style)"
 
-[conda]
-symbol = "◯ "
-format = " conda [$symbol$environment]($style)"
-
-[dart]
-symbol = "◁◅ "
-format = " dart [$symbol($version )]($style)"
-
-[docker_context]
-symbol = "◧ "
-format = " docker [$symbol$context]($style)"
-
-[elixir]
-symbol = "△ "
-format = " exs [$symbol $version OTP $otp_version ]($style)"
-
-[elm]
-symbol = "◩ "
-format = " elm [$symbol($version )]($style)"
+[rust]
+symbol = ""
+format = "[ $symbol( $version) ]($style)"
 
 [golang]
-symbol = "∩ "
-format = " go [$symbol($version )]($style)"
+symbol = ""
+format = "[ $symbol( $version) ]($style)"
+detect_files = ["go.mod"]
 
-[haskell]
-symbol = "❯λ "
-format = " hs [$symbol($version )]($style)"
+[php]
+symbol = ""
+format = "[ $symbol( $version) ]($style)"
 
 [java]
-symbol = "∪ "
-format = " java [${symbol}(${version} )]($style)"
+symbol = " "
+format = "[ $symbol( $version) ]($style)"
 
-[julia]
-symbol = "◎ "
-format = " jl [$symbol($version )]($style)"
+[kotlin]
+symbol = ""
+format = "[ $symbol( $version) ]($style)"
 
-[memory_usage]
-symbol = "▪▫▪ "
-format = " mem [${ram}( ${swap})]($style)"
+[haskell]
+symbol = ""
+format = "[ $symbol( $version) ]($style)"
 
-[nim]
-symbol = "▴▲▴ "
-format = " nim [$symbol($version )]($style)"
+[python]
+symbol = ""
+format = "[ $symbol( $version) ]($style)"
 
-[nix_shell]
-style = 'bold italic dimmed blue'
-symbol = '✶'
-format = '[$symbol nix⎪$state⎪]($style) [$name](italic dimmed white)'
-impure_msg = '[⌽](bold dimmed red)'
-pure_msg = '[⌾](bold dimmed green)'
-unknown_msg = '[◌](bold dimmed ellow)'
+[docker_context]
+symbol = ""
+format = "[ $symbol( $context) ]($style)"
 
-[spack]
-symbol = "◇ "
-format = " spack [$symbol$environment]($style)"
+[palettes.custom1]
+# --- background ---
+crust = "#11111b"
+mantle = "#181825"
+base = "#1e1e2e" # git branch bg
+
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+
+# --- text ---
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+
+# --- accents (catppuccin_mocha) ---
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe" # git branch fg
+
+[palettes.gruvbox_dark]
+# --- background ---
+crust = "#1d2021"
+mantle = "#282828"
+base = "#fbf1c7" # git branch bg
+
+surface0 = "#3c3836"
+surface1 = "#504945"
+surface2 = "#665c54"
+
+overlay0 = "#7c6f64"
+overlay1 = "#a89984"
+overlay2 = "#bdae93"
+
+# --- text ---
+text = "#ebdbb2"
+subtext0 = "#d5c4a1"
+subtext1 = "#fbf1c7"
+
+# --- accents gruvbox ---
+rosewater = "#fbf1c7"
+flamingo = "#fe8019"
+pink = "#d3869b"
+mauve = "#d3869b"
+red = "#cc241d"
+maroon = "#fb4934"
+peach = "#fe8019"
+yellow = "#d79921"
+green = "#98971a"
+teal = "#8ec07c"
+sky = "#8ec07c"
+sapphire = "#83a598"
+blue = "#458588"
+lavender = "#d3869b" # git branch fg
+
+[palettes.tokyonight_night]
+# --- background ---
+crust = "#16161e"
+mantle = "#16161e"
+base = "#1a1b26" # git branch bg
+
+surface0 = "#292e42"
+surface1 = "#3b4261"
+surface2 = "#414868"
+
+overlay0 = "#565f89"
+overlay1 = "#737aa2"
+overlay2 = "#9aa5ce"
+
+# --- text ---
+text = "#c0caf5"
+subtext0 = "#a9b1d6"
+subtext1 = "#c0caf5"
+
+# --- accents tokyonight ---
+rosewater = "#c0caf5"
+flamingo = "#ff9e64"
+pink = "#f7768e"
+mauve = "#bb9af7"
+red = "#f7768e"
+maroon = "#f7768e"
+peach = "#ff9e64"
+yellow = "#e0af68"
+green = "#9ece6a"
+teal = "#7dcfff"
+sky = "#7dcfff"
+sapphire = "#7aa2f7" # dir fg
+blue = "#7aa2f7"
+lavender = "#bb9af7" # git branch fg
+
+[palettes.solarized_osaka]
+# --- background ---
+crust = "#00141a"
+mantle = "#002029"
+base = "#002b36" # git branch bg
+
+surface0 = "#073642"
+surface1 = "#0f3b47"
+surface2 = "#124652"
+
+overlay0 = "#586e75"
+overlay1 = "#657b83"
+overlay2 = "#839496"
+
+# --- text ---
+text = "#93a1a1"
+subtext0 = "#839496"
+subtext1 = "#93a1a1"
+
+# --- accents ---
+rosewater = "#eee8d5"
+flamingo = "#dc322f"
+pink = "#d33682"
+mauve = "#6c71c4"
+red = "#dc322f"
+maroon = "#cb4b16"
+peach = "#cb4b16"
+yellow = "#b58900"
+green = "#859900"
+teal = "#2aa198"
+sky = "#2aa198"
+sapphire = "#268bd2" # dir fg
+blue = "#268bd2"
+lavender = "#f84668" # git branch fg
+
+[palettes.one_dark]
+# --- background ---
+crust = "#21252B"
+mantle = "#282C34"
+base = "#181825" # git branch bg
+
+surface0 = "#353B45"
+surface1 = "#3E4452"
+surface2 = "#484F5E"
+overlay0 = "#5C6370"
+overlay1 = "#636D83"
+overlay2 = "#ABB2BF"
+
+# --- text ---
+text = "#ABB2BF"
+subtext0 = "#5C6370"
+subtext1 = "#ABB2BF"
+
+# --- accents ---
+rosewater = "#ABB2BF"
+flamingo = "#E06C75"
+pink = "#C678DD"
+mauve = "#C678DD"
+red = "#E06C75"
+maroon = "#E06C75"
+peach = "#D19A66"
+yellow = "#E5C07B"
+green = "#98C379"
+teal = "#56B6C2"
+sky = "#56B6C2"
+sapphire = "#61AFEF" # dir fg
+blue = "#61AFEF"
+lavender = "#61AFEF"   # git branch fg
