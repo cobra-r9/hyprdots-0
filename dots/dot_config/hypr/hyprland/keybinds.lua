@@ -121,9 +121,9 @@ hl.bind(vars.kbWindowPip, function()
     end
 end)
 hl.bind(vars.kbPinWindow, hl.dsp.window.pin())
+hl.bind(vars.kbWindowPseudo, hl.dsp.window.pseudo())
 hl.bind(vars.kbWindowFullscreen, hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 hl.bind(vars.kbWindowBorderedFullscreen, hl.dsp.window.fullscreen({ mode = "maximized" }))
-
 -- define float rules for apps, others fallback to default float. 
 -- these float dimensions are defined in variables. Cause these are apps and dimensions.
 
