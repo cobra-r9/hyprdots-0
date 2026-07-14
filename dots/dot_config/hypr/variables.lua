@@ -76,8 +76,6 @@ return {
     kbToggleGroup              = "SUPER + Comma",
 
     -- Window Action
-    kbMoveWindow               = "SUPER + Z",
-    kbResizeWindow             = "SUPER + X",
     kbWindowPip                = "f8",
     kbPinWindow                = "f9",
     kbWindowFullscreen         = "f10",
