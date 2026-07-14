@@ -76,10 +76,29 @@ local function move_actions(win)
     end
 end
 
+
+
+local function floatSpawnRule(appKey, extra)
+    local vars = require("variables")
+    local r = vars.floatRules[appKey] or vars.defaultRule
+    local eff = { size = r.w .. " " .. r.h }
+
+    if r.x and r.y then
+        eff.move = { r.x, r.y }
+    end
+
+    for k, v in pairs(extra or {}) do
+        eff[k] = v
+    end
+
+    return eff
+end
+
 return {
     resizer              = resizer,
     resize_by_screen     = resize_by_screen,
     resize_active_window = resize_active_window,
     wsaction             = wsaction,
     move_actions         = move_actions,
+    floatSpawnRule       = floatSpawnRule,
 }

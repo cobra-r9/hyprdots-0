@@ -209,11 +209,30 @@ hl.bind("SUPER + XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -d platf
 
 
 -- Open Apps
+--( Tiled Mode )
 hl.bind(vars.kbTerminal, hl.dsp.exec_cmd(vars.terminal))
 hl.bind(vars.kbBrowser, hl.dsp.exec_cmd(vars.browser))
 hl.bind(vars.kbEditor, hl.dsp.exec_cmd(vars.editor))
 hl.bind(vars.kbFileExplorer, hl.dsp.exec_cmd(vars.fileExplorer))
 hl.bind("CTRL + ALT + V", hl.dsp.exec_cmd(vars.audioSettings))
+
+--( Float Mode ) (legacy)
+-- hl.bind("SHIFT + "..vars.kbTerminal, hl.dsp.exec_cmd(vars.terminal, { float = true }))
+-- hl.bind("SHIFT + "..vars.kbBrowser, hl.dsp.exec_cmd(vars.browser, { float = true }))
+-- hl.bind("SHIFT + "..vars.kbEditor, hl.dsp.exec_cmd(vars.editor, { float = true }))
+-- hl.bind("SHIFT + "..vars.kbFileExplorer, hl.dsp.exec_cmd(vars.fileExplorer, { float = true }))
+
+-- ( Float Mode ) (variable rule table)
+hl.bind("SHIFT + " .. vars.kbTerminal, hl.dsp.exec_cmd(vars.terminal, fn.floatSpawnRule(vars.terminal, { float = true })))
+hl.bind("SHIFT + " .. vars.kbBrowser, hl.dsp.exec_cmd(vars.browser, fn.floatSpawnRule(vars.browser, { float = true })))
+hl.bind("SHIFT + " .. vars.kbEditor, hl.dsp.exec_cmd(vars.editor, fn.floatSpawnRule(vars.editor, { float = true })))
+hl.bind("SHIFT + " .. vars.kbFileExplorer, hl.dsp.exec_cmd(vars.fileExplorer, fn.floatSpawnRule(vars.fileExplorer, { float = true })))
+
+
+
+
+hl.bind("CTRL + " .. vars.kbTerminal, hl.dsp.exec_cmd(vars.terminal, fn.floatSpawnRule(vars.terminal, { pseudo = true })))
+
 
 -- Utilities: Screenshots
 hl.bind("Print", hl.dsp.exec_cmd("caelestia screenshot"), { locked = true })
