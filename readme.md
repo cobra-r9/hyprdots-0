@@ -11,4 +11,6 @@ A stunning lenovo ideapad slim 3 configuration. I love this setup.
 - Add functionalities. 
 - Save the dots.
 
+## Gallery
 
+![desktop](./assets/desktop.png)
