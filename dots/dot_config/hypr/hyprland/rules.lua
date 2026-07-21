@@ -34,7 +34,7 @@ hl.window_rule({ match = { tag = "float" }, float = true })
 hl.window_rule({
     match = {
         class =
-        "foot|equibop|org.quickshell|imv|swappy|krita|gimp|inkscape|darktable|resolve|kdenlive|shotcut|blender|godot|(steam_app_(default|[0-9]+))|gamescope",
+        "equibop|org.quickshell|imv|swappy|krita|gimp|inkscape|darktable|resolve|kdenlive|shotcut|blender|godot|(steam_app_(default|[0-9]+))|gamescope",
     },
     tag   = "+opaque_app",
 })
@@ -102,6 +102,7 @@ hl.window_rule({
 hl.window_rule({ match = { initial_title = "Spotify( %(?Free%)?)?" }, workspace = "special:music" }) -- Spotify wayland, it has no class for some reason
 hl.window_rule({ match = { class = "discord|equibop|vesktop|whatsapp" }, workspace = "special:communication" })
 hl.window_rule({ match = { class = "Todoist" }, workspace = "special:todo" })
+hl.window_rule({ match = { class = "foot" }, opacity = "0.90 override 0.90 override "})
 -------------------------
 ---- Workspace rules ----
 -------------------------
