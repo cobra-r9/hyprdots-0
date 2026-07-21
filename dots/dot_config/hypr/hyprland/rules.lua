@@ -66,15 +66,6 @@ hl.window_rule({
     center = true,
 })
 
--- Games (Steam, Lutris/Wine, Gamescope)
-hl.window_rule({
-    match        = { class = "(steam_app_(default|[0-9]+))|gamescope" },
-    immediate    = true,
-    idle_inhibit = "always",
-})
-
--- Steam
-hl.window_rule({ match = { class = "steam" }, rounding = 10 })
 
 -- Picture in picture (resize and move done via script)
 hl.window_rule({
@@ -85,11 +76,6 @@ hl.window_rule({
     keep_aspect_ratio = true,
 })
 
--- Ueberzugpp
-hl.window_rule({ match = { class = "^(ueberzugpp_.*)$" }, float = true, no_initial_focus = true })
-
--- Autodesk Fusion 360
-hl.window_rule({ match = { class = "fusion360.exe", title = "Fusion360|(Marking Menu)" }, no_blur = true })
 
 -- Ugh xwayland popups
 hl.window_rule({ match = { xwayland = true, title = "win[0-9]+" }, tag = "+xwl_popup" })
