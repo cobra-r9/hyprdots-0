@@ -1,27 +1,30 @@
+-- ~/.config/hypr/hyprland/keybinds.lua
 local vars = require("variables")
 local fn   = require("hyprland.functions")
+local boot = require("core.bootstrap")
 
 -- Launcher
 hl.bind("SUPER + SUPER_L", hl.dsp.global("caelestia:launcher"), { release = true })
 
--- Misc
+-- Misc (caelestia shell panels)
 hl.bind(vars.kbSession, hl.dsp.global("caelestia:session"))
 hl.bind(vars.kbShowSidebar, hl.dsp.global("caelestia:sidebar"))
 hl.bind(vars.kbClearNotifs, hl.dsp.global("caelestia:clearNotifs"), { locked = true })
 hl.bind(vars.kbShowPanels, hl.dsp.global("caelestia:showall"))
 hl.bind(vars.kbLock, hl.dsp.global("caelestia:lock"))
 
--- Restore lock
-hl.bind(vars.kbRestoreLock, function()
+hl.bind(vars.kbRestoreLock, boot.safe_call(function()
     hl.dispatch(hl.dsp.exec_cmd("caelestia shell -d"))
     hl.dispatch(hl.dsp.global("caelestia:lock"))
-end)
+end, "kbRestoreLock"))
 
--- Brightness
+-- Brightness (brightnessctl installed)
 hl.bind("XF86MonBrightnessUp", hl.dsp.global("caelestia:brightnessUp"), { locked = true })
 hl.bind("XF86MonBrightnessDown", hl.dsp.global("caelestia:brightnessDown"), { locked = true })
+hl.bind("SUPER + XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl -d platform::kbd_backlight set +1"))
+hl.bind("SUPER + XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -d platform::kbd_backlight set 1-"))
 
--- Media
+-- Media (playerctl + mpd/rmpc installed — caelestia panel handles the rest)
 hl.bind("CTRL + SUPER + Space", hl.dsp.global("caelestia:mediaToggle"), { locked = true })
 hl.bind("XF86AudioPlay", hl.dsp.global("caelestia:mediaToggle"), { locked = true })
 hl.bind("XF86AudioPause", hl.dsp.global("caelestia:mediaToggle"), { locked = true })
@@ -31,7 +34,7 @@ hl.bind("CTRL + SUPER + Minus", hl.dsp.global("caelestia:mediaPrev"), { locked =
 hl.bind("XF86AudioPrev", hl.dsp.global("caelestia:mediaPrev"), { locked = true })
 hl.bind("XF86AudioStop", hl.dsp.global("caelestia:mediaStop"), { locked = true })
 
--- Kill/restart
+-- Kill/restart shell (quickshell-git provides `qs`)
 hl.bind(vars.kbKillCaelestia, hl.dsp.exec_cmd("qs -c caelestia kill"), { release = true })
 hl.bind(
     vars.kbRestartCaelestia,
@@ -39,6 +42,7 @@ hl.bind(
     { release = true }
 )
 
+-- Workspaces 1-10 / groups
 for i = 1, 10 do
     local key = i % 10 -- 10 maps to key 0
     hl.bind(vars.kbGoToWs .. " + " .. key, fn.wsaction("focus", "", i))
@@ -47,7 +51,7 @@ for i = 1, 10 do
     hl.bind(vars.kbMoveWinToWsGroup .. " + " .. key, fn.wsaction("move", "group", i))
 end
 
--- Go to workspace -1/+1
+-- Workspace -1/+1
 hl.bind("SUPER + mouse_down", hl.dsp.focus({ workspace = "-1" }))
 hl.bind("SUPER + mouse_up", hl.dsp.focus({ workspace = "+1" }))
 hl.bind(vars.kbPrevWs, hl.dsp.focus({ workspace = "-1" }), { repeating = true })
@@ -55,7 +59,7 @@ hl.bind(vars.kbNextWs, hl.dsp.focus({ workspace = "+1" }), { repeating = true })
 hl.bind("SUPER + Page_Up", hl.dsp.focus({ workspace = "-1" }), { repeating = true })
 hl.bind("SUPER + Page_down", hl.dsp.focus({ workspace = "+1" }), { repeating = true })
 
--- Go to workspace group -1/+1
+-- Workspace group -1/+1
 hl.bind("CTRL + SUPER + mouse_down", hl.dsp.focus({ workspace = "-10" }))
 hl.bind("CTRL + SUPER + mouse_up", hl.dsp.focus({ workspace = "+10" }))
 
@@ -67,7 +71,7 @@ hl.bind("SUPER + ALT + mouse_up", hl.dsp.window.move({ workspace = "+1" }))
 hl.bind("CTRL + SUPER + SHIFT + right", hl.dsp.window.move({ workspace = "+1" }), { repeating = true })
 hl.bind("CTRL + SUPER + SHIFT + left", hl.dsp.window.move({ workspace = "-1" }), { repeating = true })
 
--- Move window to/from special workspace
+-- Move to/from special workspace
 hl.bind("CTRL + SUPER + up", hl.dsp.window.move({ workspace = "special:special" }))
 hl.bind("CTRL + SUPER + down", hl.dsp.window.move({ workspace = "e+0" }))
 
@@ -80,7 +84,7 @@ hl.bind(vars.kbToggleGroup, hl.dsp.group.toggle())
 hl.bind(vars.kbUngroup, hl.dsp.window.move({ out_of_group = true }))
 hl.bind("SUPER + SHIFT + Comma", hl.dsp.group.lock_active())
 
--- Window Move Actions
+-- Focus / move by direction
 hl.bind("SUPER + left", hl.dsp.focus({ direction = "left" }))
 hl.bind("SUPER + right", hl.dsp.focus({ direction = "right" }))
 hl.bind("SUPER + up", hl.dsp.focus({ direction = "up" }))
@@ -90,164 +94,133 @@ hl.bind("SUPER + SHIFT + right", hl.dsp.window.move({ direction = "right" }))
 hl.bind("SUPER + SHIFT + up", hl.dsp.window.move({ direction = "up" }))
 hl.bind("SUPER + SHIFT + down", hl.dsp.window.move({ direction = "down" }))
 
--- Window Resize Actions
-hl.bind("SUPER + Minus", hl.dsp.window.resize(fn.resize_active_window(-10, 0)), { repeating = true })
-hl.bind("SUPER + Equal", hl.dsp.window.resize(fn.resize_active_window(10, 0)), { repeating = true })
-hl.bind("SUPER + SHIFT + Minus", hl.dsp.window.resize(fn.resize_active_window(0, -10)), { repeating = true })
-hl.bind("SUPER + SHIFT + Equal", hl.dsp.window.resize(fn.resize_active_window(0, 10)), { repeating = true })
-hl.bind("SUPER + ALT + left", hl.dsp.window.resize(fn.resize_active_window(-10, 0)), { repeating = true })
-hl.bind("SUPER + ALT + right", hl.dsp.window.resize(fn.resize_active_window(10, 0)), { repeating = true })
-hl.bind("SUPER + ALT + up", hl.dsp.window.resize(fn.resize_active_window(0, -10)), { repeating = true })
-hl.bind("SUPER + ALT + down", hl.dsp.window.resize(fn.resize_active_window(0, 10)), { repeating = true })
+------------------------------------------------------------------
+-- Window resize — FIXED: wrapped in functions so the active-window/
+-- active-monitor lookup happens at keypress time, not config-load time.
+------------------------------------------------------------------
+hl.bind("SUPER + Minus", function()
+    hl.dispatch(hl.dsp.window.resize(fn.resize_active_window(-10, 0)))
+end, { repeating = true })
+hl.bind("SUPER + Equal", function()
+    hl.dispatch(hl.dsp.window.resize(fn.resize_active_window(10, 0)))
+end, { repeating = true })
+hl.bind("SUPER + SHIFT + Minus", function()
+    hl.dispatch(hl.dsp.window.resize(fn.resize_active_window(0, -10)))
+end, { repeating = true })
+hl.bind("SUPER + SHIFT + Equal", function()
+    hl.dispatch(hl.dsp.window.resize(fn.resize_active_window(0, 10)))
+end, { repeating = true })
+hl.bind("SUPER + ALT + left", function()
+    hl.dispatch(hl.dsp.window.resize(fn.resize_active_window(-10, 0)))
+end, { repeating = true })
+hl.bind("SUPER + ALT + right", function()
+    hl.dispatch(hl.dsp.window.resize(fn.resize_active_window(10, 0)))
+end, { repeating = true })
+hl.bind("SUPER + ALT + up", function()
+    hl.dispatch(hl.dsp.window.resize(fn.resize_active_window(0, -10)))
+end, { repeating = true })
+hl.bind("SUPER + ALT + down", function()
+    hl.dispatch(hl.dsp.window.resize(fn.resize_active_window(0, 10)))
+end, { repeating = true })
 
--- Move and Resize with Mouse
+-- Move/resize with mouse
 hl.bind("SUPER + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind("SUPER + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
-
--- Other Window Functions
+-- Other window functions
 hl.bind("CTRL + SUPER + Backslash", hl.dsp.window.center())
-hl.bind("CTRL + SUPER + ALT + Backslash", hl.dsp.window.resize(fn.resize_by_screen(55, 70)))
-hl.bind(vars.kbWindowPip, function()
+hl.bind("CTRL + SUPER + ALT + Backslash", function() -- FIXED, same bug as above
+    hl.dispatch(hl.dsp.window.resize(fn.resize_by_screen(55, 70)))
+end)
+
+hl.bind(vars.kbWindowPip, boot.safe_call(function()
     local a = hl.get_active_window()
     if a then
         local pip = fn.move_actions(a) or {}
         if not a.floating then table.insert(pip, 1, hl.dsp.window.float()) end
-        table.insert(pip, hl.dsp.window.pin({ action = "on", window = "address:" .. a.address }))
+        table.insert(pip, hl.dsp.window.pin({ action = "on", window = fn.addr(a) }))
 
         for _, x in ipairs(pip) do
             hl.dispatch(x)
         end
     end
-end)
+end, "kbWindowPip"))
+
 hl.bind(vars.kbPinWindow, hl.dsp.window.pin())
 hl.bind(vars.kbWindowPseudo, hl.dsp.window.pseudo())
 hl.bind(vars.kbWindowFullscreen, hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 hl.bind(vars.kbWindowBorderedFullscreen, hl.dsp.window.fullscreen({ mode = "maximized" }))
--- define float rules for apps, others fallback to default float. 
--- these float dimensions are defined in variables. Cause these are apps and dimensions.
 
-local floatRules = vars.floatRules
-local defaultRule = vars.defaultRule
-
--- located float (custom)
-hl.bind(vars.kbToggleWindowFloating, function()
+hl.bind(vars.kbToggleWindowFloating, boot.safe_call(function()
     hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
     local w = hl.get_active_window()
     if w and w.floating then
         local class = w.class and w.class:lower() or ""
-        local rule = floatRules[class] or defaultRule
+        local rule = vars.floatRules[class] or vars.defaultRule
 
         hl.dispatch(hl.dsp.window.resize({ exact = true, x = rule.w, y = rule.h }))
 
         if rule.x and rule.y then
             hl.dispatch(hl.dsp.window.move({ exact = true, x = rule.x, y = rule.y }))
-        else 
+        else
             hl.dispatch(hl.dsp.window.center())
         end
     end
-end)
+end, "kbToggleWindowFloating"))
 
-
--- centered float version : generic 
--- hl.bind(vars.kbToggleWindowFloating, function()
---     hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
---     local w = hl.get_active_window()
---     if w and w.floating then 
---         hl.dispatch(hl.dsp.window.resize({ exact = true, x = 1000, y = 600 }))
---         hl.dispatch(hl.dsp.window.center())
---     end
--- end)
-
--- Close Window
 hl.bind(vars.kbCloseWindow, hl.dsp.window.close())
 
--- Special workspace toggles
+-- Special workspace toggles (caelestia)
 hl.bind(vars.kbSpecialWs, hl.dsp.exec_cmd("caelestia toggle specialws"))
 hl.bind(vars.kbSystemMonitorWs, hl.dsp.exec_cmd("caelestia toggle sysmon"))
 hl.bind(vars.kbMusicWs, hl.dsp.exec_cmd("caelestia toggle music"))
 hl.bind(vars.kbCommunicationWs, hl.dsp.exec_cmd("caelestia toggle communication"))
 hl.bind(vars.kbTodoWs, hl.dsp.exec_cmd("caelestia toggle todo"))
 
--- Workspace Layout toggles : all 
-
-hl.bind(vars.kbToggleWsLayout, function()
+-- Layout toggles: all -> next
+hl.bind(vars.kbToggleWsLayout, boot.safe_call(function()
     local ws = hl.get_active_workspace()
     if not ws then return end
+    local order = { dwindle = "scrolling", scrolling = "master", master = "monocle", monocle = "dwindle" }
+    hl.workspace_rule({ workspace = tostring(ws.id), layout = order[ws.tiled_layout] or "dwindle" })
+end, "kbToggleWsLayout"))
 
-    local order = {
-        dwindle = "scrolling",
-        scrolling = "master",
-        master = "monocle",
-        monocle = "dwindle",
-    }
-
-    local next_layout = order[ws.tiled_layout] or "dwindle"
-    hl.workspace_rule({ workspace = tostring(ws.id), layout = next_layout })
-end)
-
--- Workspace Layout toggle between dwindle and scrolling 
-hl.bind(vars.kbToggleWsScrollLayout, function()
+-- dwindle <-> scrolling only
+hl.bind(vars.kbToggleWsScrollLayout, boot.safe_call(function()
     local ws = hl.get_active_workspace()
     if not ws then return end
+    local order = { dwindle = "scrolling", scrolling = "dwindle" }
+    hl.workspace_rule({ workspace = tostring(ws.id), layout = order[ws.tiled_layout] or "dwindle" })
+end, "kbToggleWsScrollLayout"))
 
-    local order = {
-        dwindle = "scrolling",
-        scrolling = "dwindle",
-    }
-
-    local next_layout = order[ws.tiled_layout] or "dwindle"
-    hl.workspace_rule({ workspace = tostring(ws.id), layout = next_layout })
-end)
-
-
-
--- Keyboard Backlight
-
-hl.bind("SUPER + XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl -d platform::kbd_backlight set +1"))
-hl.bind("SUPER + XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -d platform::kbd_backlight set 1-"))
-
-
--- Open Apps
---( Tiled Mode )
+-- Open apps (tiled)
 hl.bind(vars.kbTerminal, hl.dsp.exec_cmd(vars.terminal))
 hl.bind(vars.kbBrowser, hl.dsp.exec_cmd(vars.browser))
 hl.bind(vars.kbEditor, hl.dsp.exec_cmd(vars.editor))
 hl.bind(vars.kbFileExplorer, hl.dsp.exec_cmd(vars.fileExplorer))
 hl.bind("CTRL + ALT + V", hl.dsp.exec_cmd(vars.audioSettings))
 
---( Float Mode ) (legacy)
--- hl.bind("SHIFT + "..vars.kbTerminal, hl.dsp.exec_cmd(vars.terminal, { float = true }))
--- hl.bind("SHIFT + "..vars.kbBrowser, hl.dsp.exec_cmd(vars.browser, { float = true }))
--- hl.bind("SHIFT + "..vars.kbEditor, hl.dsp.exec_cmd(vars.editor, { float = true }))
--- hl.bind("SHIFT + "..vars.kbFileExplorer, hl.dsp.exec_cmd(vars.fileExplorer, { float = true }))
-
--- ( Float Mode ) (variable rule table)
+-- Open apps (float, sized via variables.floatRules)
 hl.bind("SHIFT + " .. vars.kbTerminal, hl.dsp.exec_cmd(vars.terminal, fn.floatSpawnRule(vars.terminal, { float = true })))
 hl.bind("SHIFT + " .. vars.kbBrowser, hl.dsp.exec_cmd(vars.browser, fn.floatSpawnRule(vars.browser, { float = true })))
 hl.bind("SHIFT + " .. vars.kbEditor, hl.dsp.exec_cmd(vars.editor, fn.floatSpawnRule(vars.editor, { float = true })))
 hl.bind("SHIFT + " .. vars.kbFileExplorer, hl.dsp.exec_cmd(vars.fileExplorer, fn.floatSpawnRule(vars.fileExplorer, { float = true })))
-
-
-
-
 hl.bind("CTRL + " .. vars.kbTerminal, hl.dsp.exec_cmd(vars.terminal, fn.floatSpawnRule(vars.terminal, { pseudo = true })))
 
-
--- Utilities: Screenshots
+-- Screenshots (caelestia wraps grim/slurp/swappy, all installed)
 hl.bind("Print", hl.dsp.exec_cmd("caelestia screenshot"), { locked = true })
 hl.bind("SUPER + SHIFT + S", hl.dsp.global("caelestia:screenshotFreeze"))
-
--- Utilities: Screen Recording
 hl.bind("SUPER + SHIFT + ALT + S", hl.dsp.global("caelestia:screenshot"))
+
+-- Screen recording (gpu-screen-recorder installed; caelestia wraps it)
 hl.bind("SUPER + ALT + R", hl.dsp.exec_cmd("caelestia record -s"))
 hl.bind("CTRL + ALT + R", hl.dsp.exec_cmd("caelestia record"))
 hl.bind("SUPER + SHIFT + ALT + R", hl.dsp.exec_cmd("caelestia record -r"))
 
--- Utilities: Color Picker
+-- Color picker (hyprpicker installed)
 hl.bind("SUPER + SHIFT + C", hl.dsp.exec_cmd("hyprpicker -a"))
 
--- Volume
+-- Volume (wireplumber's wpctl)
 hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"), { locked = true })
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
 hl.bind("SUPER + SHIFT + M", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
@@ -270,7 +243,7 @@ hl.bind(
 -- Sleep
 hl.bind("SUPER + SHIFT + L", hl.dsp.exec_cmd(vars.sleepGestureCmd), { locked = true })
 
--- Clipboard and emoji picker
+-- Clipboard / emoji (cliphist + ydotool installed; fuzzel as picker frontend)
 hl.bind("SUPER + V", hl.dsp.exec_cmd("pkill fuzzel || caelestia clipboard"))
 hl.bind("SUPER + ALT + V", hl.dsp.exec_cmd("pkill fuzzel || caelestia clipboard -d"))
 hl.bind("SUPER + Period", hl.dsp.exec_cmd("pkill fuzzel || caelestia emoji -p"))
@@ -278,14 +251,4 @@ hl.bind(
     "CTRL + SHIFT + ALT + V",
     hl.dsp.exec_cmd('sleep 0.5s && ydotool type -d 1 "$(cliphist list | head -1 | cliphist decode)"'),
     { locked = true }
-)
-
--- Testing
-hl.bind(
-    "SUPER + ALT + F12",
-    hl.dsp.exec_cmd(
-        "notify-send -u low -i dialog-information-symbolic 'Test notification' " ..
-        [["Here's a really long message to test truncation and wrapping\nYou can middle click or flick this notification to dismiss it!"]] ..
-        " -a 'Shell' -A 'Test1=I got it!' -A 'Test2=Another action'"
-    )
 )

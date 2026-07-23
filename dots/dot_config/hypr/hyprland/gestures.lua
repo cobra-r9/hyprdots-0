@@ -1,35 +1,33 @@
+-- ~/.config/hypr/hyprland/gestures.lua
 local vars = require("variables")
-
-
-
-
--------------------------------------------------------------------> 
--- Gesture config of cealestia ported to hyprland 
 
 hl.config({
     gestures = {
         workspace_swipe_distance                 = 700,
         workspace_swipe_cancel_ratio             = 0.15,
-        workspace_swipe_min_speed_to_force       = 5,
-        workspace_swipe_direction_lock           = true,
-        workspace_swipe_direction_lock_threshold = 10,
-        workspace_swipe_create_new               = true,
+        workspace_swipe_min_speed_to_force        = 5,
+        workspace_swipe_direction_lock            = true,
+        workspace_swipe_direction_lock_threshold  = 10,
+        workspace_swipe_create_new                = true,
     },
 })
 
+-- 3-finger horizontal swipe: switch workspace
 hl.gesture({
-    fingers = vars.workspaceSwipeFingers,
+    fingers   = vars.workspaceSwipeFingers,
     direction = "horizontal",
-    action = "workspace"
+    action    = "workspace",
 })
 
+-- 3-finger swipe up: show special/scratchpad workspace
 hl.gesture({
-    fingers = vars.gestureFingers,
-    direction = "up",
-    action = "special",
-    workspace_name = "special"
+    fingers        = vars.gestureFingers,
+    direction      = "up",
+    action         = "special",
+    workspace_name = "special",
 })
 
+-- 3-finger swipe down: toggle special workspace via caelestia (caelestia-cli installed)
 hl.gesture({
     fingers   = vars.gestureFingers,
     direction = "down",
@@ -38,6 +36,7 @@ hl.gesture({
     end,
 })
 
+-- 4-finger swipe down: sleep
 hl.gesture({
     fingers   = vars.gestureFingersMore,
     direction = "down",
@@ -46,13 +45,9 @@ hl.gesture({
     end,
 })
 
--------------------------------------------------------------------> 
--- Gesture config of end 4 ported to hyprland 
-
+-- 3-finger pinch: fullscreen toggle
 hl.gesture({
-    fingers = vars.gestureFingersFullscreen,
+    fingers   = vars.gestureFingersFullscreen,
     direction = "pinch",
-    action = "fullscreen"
+    action    = "fullscreen",
 })
-
-

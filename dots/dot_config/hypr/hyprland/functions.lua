@@ -1,3 +1,12 @@
+-- ~/.config/hypr/hyprland/functions.lua
+
+-- Turn an HL.Window into the address-selector string dispatchers expect.
+-- (hl.dsp.* window fields want a selector string, not the window table itself —
+-- see keybinds usage elsewhere for the pattern this codifies.)
+local function addr(win)
+    return win and win.address and ("address:" .. win.address) or nil
+end
+
 local function wsaction(action, range, i)
     return function()
         local activews = hl.get_active_workspace()
@@ -29,19 +38,20 @@ end
 
 local function resize_active_window(x, y)
     local win = hl.get_active_window()
-    if win and win.size then
-        local w = (win.size.x * (x / 100)) or 800
-        local h = (win.size.y * (y / 100)) or 600
-
+    if win and win.size and win.size.x and win.size.y then
+        local w = win.size.x * (x / 100)
+        local h = win.size.y * (y / 100)
         return { x = w, y = h, relative = true }
     end
+    -- no active window / no size data: return nil rather than a fake fallback,
+    -- callers (keybinds.lua) already check before dispatching
 end
 
 local function resizer(window, pattern, x_percent, y_percent, actions, exact)
     if (window and window.title) and string.find(window.title, pattern, 1, exact) then
         local disp = (type(actions) == "table") and actions or { actions }
-        for _, x in ipairs(disp) do
-            hl.dispatch(x)
+        for _, a in ipairs(disp) do
+            hl.dispatch(a)
         end
 
         hl.dispatch(hl.dsp.window.resize(resize_by_screen(x_percent, y_percent)))
@@ -56,27 +66,25 @@ local function move_actions(win)
         local monitor_height = screen.height / screen.scale
         local monitor_width  = screen.width / screen.scale
 
-        local scale_factor   = (monitor_height / 4) / win.size.y
+        local scale_factor  = (monitor_height / 4) / win.size.y
 
-        local target_width   = win.size.x * scale_factor
-        local target_height  = win.size.y * scale_factor
+        local target_width  = win.size.x * scale_factor
+        local target_height = win.size.y * scale_factor
 
-        local x_resize       = math.floor(math.max(200, target_width))
-        local y_resize       = math.floor(math.max(150, target_height))
+        local x_resize = math.floor(math.max(200, target_width))
+        local y_resize = math.floor(math.max(150, target_height))
 
-        local offset         = math.min(monitor_width, monitor_height) * 0.03
+        local offset = math.min(monitor_width, monitor_height) * 0.03
 
-        local move_x         = math.floor(screen.x + monitor_width - x_resize - offset)
-        local move_y         = math.floor(screen.y + monitor_height - y_resize - offset)
+        local move_x = math.floor(screen.x + monitor_width - x_resize - offset)
+        local move_y = math.floor(screen.y + monitor_height - y_resize - offset)
 
         return {
-            hl.dsp.window.resize({ x = x_resize, y = y_resize, window = win }),
-            hl.dsp.window.move({ x = move_x, y = move_y, relative = false, window = win }),
+            hl.dsp.window.resize({ x = x_resize, y = y_resize, window = addr(win) }),
+            hl.dsp.window.move({ x = move_x, y = move_y, relative = false, window = addr(win) }),
         }
     end
 end
-
-
 
 local function floatSpawnRule(appKey, extra)
     local vars = require("variables")
@@ -95,10 +103,11 @@ local function floatSpawnRule(appKey, extra)
 end
 
 return {
-    resizer              = resizer,
-    resize_by_screen     = resize_by_screen,
-    resize_active_window = resize_active_window,
-    wsaction             = wsaction,
-    move_actions         = move_actions,
-    floatSpawnRule       = floatSpawnRule,
+    addr                  = addr,
+    resizer               = resizer,
+    resize_by_screen      = resize_by_screen,
+    resize_active_window  = resize_active_window,
+    wsaction              = wsaction,
+    move_actions          = move_actions,
+    floatSpawnRule        = floatSpawnRule,
 }

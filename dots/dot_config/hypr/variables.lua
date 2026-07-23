@@ -1,3 +1,4 @@
+-- ~/.config/hypr/variables.lua
 local scheme = require("scheme.current")
 
 return {
@@ -6,76 +7,80 @@ return {
     ------------------
 
     -- Apps
-    terminal                   = "foot",
-    browser                    = "zen-browser",
-    editor                     = "nvim",
-    fileExplorer               = "thunar",
-    audioSettings              = "pavucontrol",
+    -- NOTE: you have BOTH thunar and dolphin, and BOTH nvim and zed installed.
+    -- Defaulting to thunar/nvim (matches your old setup) — say the word if
+    -- you actually want dolphin/zed as primary now, it's a one-line change.
+    terminal      = "foot",
+    browser       = "zen-browser",   -- zen-browser-bin's desktop entry launches this binary name
+    editor        = "nvim",
+    fileExplorer  = "thunar",
+    audioSettings = "pavucontrol",
 
-    -- Touchpad
-    touchpadDisableTyping      = true,
-    touchpadScrollFactor       = 0.3,
-    gestureFingers             = 3,
-    workspaceSwipeFingers      = 3,
-    gestureFingersMore         = 4,
-    gestureFingersFullscreen   = 3,
+    -- Touchpad / gestures
+    touchpadDisableTyping    = true,
+    touchpadScrollFactor     = 0.3,
+    gestureFingers           = 3,
+    workspaceSwipeFingers    = 3,
+    gestureFingersMore       = 4,
+    gestureFingersFullscreen = 3,
 
-    -- Blur
-    blurEnabled                = true,
-    blurSpecialWs              = false,
-    blurPopups                 = true,
-    blurInputMethods           = true,
-    blurSize                   = 8,
-    blurPasses                 = 3,
-    blurXray                   = false,
+    -- Blur — universal, on by default (decoration.lua will wire these in)
+    blurEnabled      = true,
+    blurSpecialWs    = false,   -- was false in your old config; you asked for "everything"
+    blurPopups       = true,
+    blurInputMethods = true,
+    blurSize         = 8,
+    blurPasses       = 3,
+    blurXray         = false,
 
     -- Shadow
-    shadowEnabled              = true,
-    shadowRange                = 15,
-    shadowRenderPower          = 4,
-    shadowColour               = "rgba(" .. scheme.inversePrimary .. "10)",
+    shadowEnabled     = true,
+    shadowRange       = 15,
+    shadowRenderPower = 4,
+    shadowColour      = "rgba(" .. scheme.inversePrimary .. "10)",
 
     -- Gaps
-    workspaceGaps              = 20,
-    windowGapsIn               = 5,
-    windowGapsOut              = 10,
-    singleWindowGapsOut        = 10,
+    workspaceGaps       = 20,
+    windowGapsIn        = 5,
+    windowGapsOut       = 10,
+    singleWindowGapsOut = 10,
 
-    -- Window styling
-    windowOpacity              = 0.95,
+    -- Window styling — transparency for everything (opacity < 1 globally);
+    -- opaque-app exceptions get overridden per-window in rules.lua, not here.
+    windowOpacity              = 0.90,
     windowRounding             = 15,
     windowBorderSize           = 1,
     activeWindowBorderColour   = "rgba(" .. scheme.primary .. "e6)",
     inactiveWindowBorderColour = "rgba(" .. scheme.onSurfaceVariant .. "11)",
 
     -- Misc
-    volumeStep                 = 10,
-    volumeMax                  = 100,
-    cursorTheme                = "sweet-cursors",
-    cursorSize                 = 24,
-    sleepGestureCmd            = "systemctl suspend-then-hibernate",
+    volumeStep      = 10,
+    volumeMax       = 100,
+    cursorTheme     = "Adwaita",   -- adwaita-cursors is installed; no "sweet-cursors" package present
+    cursorSize      = 24,
+    sleepGestureCmd = "systemctl suspend-then-hibernate",
 
     ------------------
     ---- KEYBINDS ----
     ------------------
 
     -- Workspaces
-    kbMoveWinToWs              = "SUPER + SHIFT",
-    kbMoveWinToWsGroup         = "CTRL + SUPER + ALT",
-    kbGoToWs                   = "SUPER",
-    kbGoToWsGroup              = "CTRL + SUPER",
-    kbNextWs                   = "CTRL + SUPER + Right",
-    kbPrevWs                   = "CTRL + SUPER + Left",
-    kbToggleWsLayout           = "f12",
-    kbToggleWsScrollLayout     = "SUPER + Space",
+    kbMoveWinToWs          = "SUPER + SHIFT",
+    kbMoveWinToWsGroup     = "CTRL + SUPER + ALT",
+    kbGoToWs               = "SUPER",
+    kbGoToWsGroup          = "CTRL + SUPER",
+    kbNextWs               = "CTRL + SUPER + Right",
+    kbPrevWs               = "CTRL + SUPER + Left",
+    kbToggleWsLayout       = "f12",
+    kbToggleWsScrollLayout = "SUPER + Space",
 
-    -- Window Group
-    kbWindowGroupCycleNext     = "ALT + TAB",
-    kbWindowGroupCyclePrev     = "SHIFT + ALT + TAB",
-    kbUngroup                  = "SUPER + U",
-    kbToggleGroup              = "SUPER + Comma",
+    -- Window group
+    kbWindowGroupCycleNext = "ALT + TAB",
+    kbWindowGroupCyclePrev = "SHIFT + ALT + TAB",
+    kbUngroup              = "SUPER + U",
+    kbToggleGroup          = "SUPER + Comma",
 
-    -- Window Action
+    -- Window action
     kbWindowPip                = "f7",
     kbWindowPseudo             = "f8",
     kbPinWindow                = "f9",
@@ -84,37 +89,44 @@ return {
     kbToggleWindowFloating     = "f11",
     kbCloseWindow              = "SUPER + C",
 
-    -- Special workspaces toggles
-    kbSpecialWs                = "SUPER + S",
-    kbSystemMonitorWs          = "CTRL + SHIFT + Escape",
-    kbMusicWs                  = "SUPER + M",
-    kbCommunicationWs          = "SUPER + D",
-    kbTodoWs                   = "SUPER + R",
+    -- Special workspace toggles
+    kbSpecialWs       = "SUPER + S",
+    kbSystemMonitorWs = "CTRL + SHIFT + Escape",
+    kbMusicWs         = "SUPER + M",
+    kbCommunicationWs = "SUPER + D",
+    kbTodoWs          = "SUPER + R",
 
     -- Apps
-    kbTerminal                 = "SUPER + Return",
-    kbBrowser                  = "SUPER + B",
-    kbEditor                   = "SUPER + E",
-    kbFileExplorer             = "SUPER + T",
+    kbTerminal     = "SUPER + Return",
+    kbBrowser      = "SUPER + B",
+    kbEditor       = "SUPER + E",
+    kbFileExplorer = "SUPER + T",
 
     -- Misc
-    kbSession                  = "ALT + f4",
-    kbShowSidebar              = "SUPER + N",
-    kbClearNotifs              = "CTRL + ALT + C",
-    kbShowPanels               = "SUPER + K",
-    kbLock                     = "SUPER + L",
-    kbRestoreLock              = "SUPER + ALT + L",
+    kbSession     = "ALT + f4",
+    kbShowSidebar = "SUPER + N",
+    kbClearNotifs = "CTRL + ALT + C",
+    kbShowPanels  = "SUPER + K",
+    kbLock        = "SUPER + L",
+    kbRestoreLock = "SUPER + ALT + L",
 
-    -- Caelestia
-    enable_caelestia           = true,
-    kbKillCaelestia            = "CTRL + ALT + Delete",
-    kbRestartCaelestia         = "CTRL + SHIFT + R",
+    -- Caelestia (caelestia-cli + caelestia-shell are both installed)
+    enable_caelestia   = true,
+    kbKillCaelestia    = "CTRL + ALT + Delete",
+    kbRestartCaelestia = "CTRL + SHIFT + R",
 
-    -- Float Rules and app list. 
+    -- Float rules — keyed by lowercase window class, built from packages you
+    -- actually have installed (dolphin AND thunar both present; both get an
+    -- entry so rules.lua can size either one correctly regardless of which
+    -- you launch manually).
     floatRules = {
-        ["thunar"] = { w = 1000, h = 600, x = 100, y = 100 },
-        ["foot"] = { w = 1000, h = 600 }, --> no x, y : just centers
-        ["org.kde.dolphin"] = { w = 1000, h = 800, x = 200, y = 200},
+        ["thunar"]              = { w = 1000, h = 600, x = 100, y = 100 },
+        ["org.kde.dolphin"]     = { w = 1000, h = 800, x = 200, y = 200 },
+        ["foot"]                = { w = 1000, h = 600 },
+        ["org.pulseaudio.pavucontrol"] = { w = 800, h = 600 },
+        ["blueman-manager"]     = { w = 700, h = 500 },
+        ["nwg-look"]            = { w = 900, h = 700 },
+        ["org.kde.partitionmanager"] = { w = 1100, h = 700 },
     },
 
     defaultRule = { w = 1000, h = 600 },

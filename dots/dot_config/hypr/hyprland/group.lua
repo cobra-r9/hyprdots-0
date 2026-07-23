@@ -1,3 +1,4 @@
+-- ~/.config/hypr/hyprland/group.lua
 local scheme = require("scheme.current")
 local vars   = require("variables")
 
@@ -10,7 +11,7 @@ hl.config({
             border_locked_inactive = vars.inactiveWindowBorderColour,
         },
         groupbar = {
-            font_family               = "JetBrains Mono NF",
+            font_family               = "JetBrains Mono NF", -- ttf-jetbrains-mono-nerd installed
             font_size                 = 15,
             gradients                 = true,
             gradient_round_only_edges = false,
@@ -20,10 +21,10 @@ hl.config({
             gaps_in                   = 3,
             gaps_out                  = 3,
             text_color                = "rgb(" .. scheme.onPrimary .. ")",
-            col                       = {
-                active          = "rgba(" .. scheme.primary .. "d4)",
-                inactive        = "rgba(" .. scheme.outline .. "d4)",
-                locked_active   = "rgba(" .. scheme.primary .. "d4)",
+            col = {
+                active          = "rgba(" .. scheme.primary   .. "d4)",
+                inactive        = "rgba(" .. scheme.outline   .. "d4)",
+                locked_active   = "rgba(" .. scheme.primary   .. "d4)",
                 locked_inactive = "rgba(" .. scheme.secondary .. "d4)",
             },
         },

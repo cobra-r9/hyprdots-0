@@ -1,3 +1,4 @@
+-- ~/.config/hypr/hyprland/animations.lua
 hl.config({
     animations = {
         -- enable animations
