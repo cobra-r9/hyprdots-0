@@ -13,7 +13,7 @@ hl.window_rule({ match = { float = true, xwayland = false }, center = true }) --
 hl.window_rule({
     match = {
         class =
-        "guifetch|yad|zenity|wev|org.gnome.FileRoller|file-roller|blueman-manager|com.github.GradienceTeam.Gradience|feh|imv|system-config-printer|org.quickshell",
+        "dev.geopjr.Tuba|guifetch|yad|zenity|wev|org.gnome.FileRoller|file-roller|blueman-manager|com.github.GradienceTeam.Gradience|feh|imv|system-config-printer|org.quickshell",
     },
     tag   = "+float",
 })
@@ -44,7 +44,7 @@ hl.window_rule({ match = { tag = "opaque_app" }, opaque = true })
 -- Sized & Centered Floaters
 hl.window_rule({ match = { class = "foot", title = "nmtui" }, tag = "+float_60_70" })
 hl.window_rule({ match = { class = "org.pulseaudio.pavucontrol|yad-icon-browser" }, tag = "+float_60_70" })
-hl.window_rule({ match = { class = "org.gnome.Settings" }, tag = "+float_70_80" })
+hl.window_rule({ match = { class = "org.gnome.Settings|dev.geopjr.Tuba" }, tag = "+float_70_80" })
 hl.window_rule({ match = { class = "nwg-look" }, tag = "+float_50_60" })
 
 hl.window_rule({
