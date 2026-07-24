@@ -10,7 +10,7 @@ return {
     -- NOTE: you have BOTH thunar and dolphin, and BOTH nvim and zed installed.
     -- Defaulting to thunar/nvim (matches your old setup) — say the word if
     -- you actually want dolphin/zed as primary now, it's a one-line change.
-    terminal      = "foot",
+    terminal      = "kitty",
     browser       = "zen-browser",   -- zen-browser-bin's desktop entry launches this binary name
     editor        = "nvim",
     fileExplorer  = "thunar",
